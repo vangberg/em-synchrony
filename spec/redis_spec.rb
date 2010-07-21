@@ -1,4 +1,5 @@
 require "spec/helper/all"
+require 'lib/em-synchrony/em-redis'
 
 describe EM::Protocols::Redis do
 

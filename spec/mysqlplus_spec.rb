@@ -1,6 +1,7 @@
 require "spec/helper/all"
 require "mysqlplus"
 require "em-mysqlplus"
+require 'lib/em-synchrony/em-mysqlplus'
 
 DELAY = 0.25
 QUERY = "select sleep(#{DELAY})"

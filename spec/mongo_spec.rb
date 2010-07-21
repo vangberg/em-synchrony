@@ -1,4 +1,5 @@
 require "spec/helper/all"
+require 'lib/em-synchrony/em-http'
 
 describe EM::Mongo do
 

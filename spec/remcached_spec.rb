@@ -1,5 +1,6 @@
 require "spec/helper/all"
 require "remcached"
+require 'lib/em-synchrony/em-remcached'
 
 describe Memcached do
 

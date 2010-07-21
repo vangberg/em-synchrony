@@ -1,4 +1,5 @@
 require "spec/helper/all"
+require 'lib/em-synchrony/em-http'
 
 URL = "http://localhost:8081/"
 DELAY = 0.25
