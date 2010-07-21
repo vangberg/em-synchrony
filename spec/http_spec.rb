@@ -4,18 +4,18 @@ require 'lib/em-synchrony/em-http'
 URL = "http://localhost:8081/"
 DELAY = 0.25
 
-describe EventMachine::HttpRequest do
+describe EventMachine::Synchrony::HttpRequest do
   it "should fire sequential requests" do
     EventMachine.synchrony do
       s = StubServer.new("HTTP/1.0 200 OK\r\nConnection: close\r\n\r\nFoo", DELAY)
 
       start = now
       order = []
-      order.push :get  if EventMachine::HttpRequest.new(URL).get
-      order.push :post if EventMachine::HttpRequest.new(URL).post
-      order.push :head if EventMachine::HttpRequest.new(URL).head
-      order.push :post if EventMachine::HttpRequest.new(URL).delete
-      order.push :put  if EventMachine::HttpRequest.new(URL).put
+      order.push :get  if EventMachine::Synchrony::HttpRequest.new(URL).get
+      order.push :post if EventMachine::Synchrony::HttpRequest.new(URL).post
+      order.push :head if EventMachine::Synchrony::HttpRequest.new(URL).head
+      order.push :post if EventMachine::Synchrony::HttpRequest.new(URL).delete
+      order.push :put  if EventMachine::Synchrony::HttpRequest.new(URL).put
 
       (now - start.to_f).should be_within(DELAY * order.size * 0.15).of(DELAY * order.size)
       order.should == [:get, :post, :head, :post, :put]
@@ -32,11 +32,11 @@ describe EventMachine::HttpRequest do
       start = now
 
       multi = EventMachine::Synchrony::Multi.new
-      multi.add :a, EventMachine::HttpRequest.new(URL).aget
-      multi.add :b, EventMachine::HttpRequest.new(URL).apost
-      multi.add :c, EventMachine::HttpRequest.new(URL).ahead
-      multi.add :d, EventMachine::HttpRequest.new(URL).adelete
-      multi.add :e, EventMachine::HttpRequest.new(URL).aput
+      multi.add :a, EventMachine::Synchrony::HttpRequest.new(URL).sget
+      multi.add :b, EventMachine::Synchrony::HttpRequest.new(URL).spost
+      multi.add :c, EventMachine::Synchrony::HttpRequest.new(URL).shead
+      multi.add :d, EventMachine::Synchrony::HttpRequest.new(URL).sdelete
+      multi.add :e, EventMachine::Synchrony::HttpRequest.new(URL).sput
       res = multi.perform
 
       (now - start.to_f).should be_within(DELAY * 0.15).of(DELAY)

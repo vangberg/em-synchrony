@@ -5,20 +5,22 @@ rescue LoadError => error
 end
 
 module EventMachine
-  class HttpRequest
-     %w[get head post delete put].each do |type|
-       class_eval %[
-         alias :a#{type} :#{type}
-         def #{type}(options = {}, &blk)
-           f = Fiber.current
+  module Synchrony
+    class HttpRequest < EM::HttpRequest
+       %w[get head post delete put].each do |type|
+         class_eval %[
+           alias :s#{type} :#{type}
+           def #{type}(options = {}, &blk)
+             f = Fiber.current
 
-            conn = setup_request(:#{type}, options, &blk)
-            conn.callback { f.resume(conn) }
-            conn.errback  { f.resume(conn) }
+              conn = setup_request(:#{type}, options, &blk)
+              conn.callback { f.resume(conn) }
+              conn.errback  { f.resume(conn) }
 
-            Fiber.yield
-         end
-      ]
+              Fiber.yield
+           end
+        ]
+      end
     end
   end
 end
